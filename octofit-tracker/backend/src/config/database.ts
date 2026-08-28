@@ -13,6 +13,10 @@ mongoose
     process.exit(1);
   });
 
-db.on('error', console.error.bind(console, 'connection error:'));
+const connectionEvents = db as unknown as {
+  on(event: string, listener: (...args: unknown[]) => void): void;
+};
+
+connectionEvents.on('error', console.error.bind(console, 'connection error:'));
 
 export default db;
