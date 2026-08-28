@@ -1,0 +1,59 @@
+import { useEffect, useState } from 'react'
+
+const API_BASE = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api`
+  : `http://localhost:8000/api`
+if (!import.meta.env.VITE_CODESPACE_NAME && typeof window !== 'undefined') console.warn('VITE_CODESPACE_NAME not set; falling back to http://localhost:8000 (set VITE_CODESPACE_NAME in .env.local for Codespaces)')
+
+function parseList(json) {
+  if (Array.isArray(json)) return json
+  return json.results || json.data || json.items || json.workouts || []
+}
+
+export default function Workouts() {
+  const [items, setItems] = useState([])
+  const [next, setNext] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const initialUrl = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`
+    : `http://localhost:8000/api/workouts/`
+
+  async function fetchData(url = initialUrl) {
+    setLoading(true)
+    try {
+      const res = await fetch(url)
+      const json = await res.json()
+      const list = parseList(json)
+      setItems((prev) => (url === initialUrl ? list : [...prev, ...list]))
+      setNext(json.next || null)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { fetchData() }, [])
+
+  return (
+    <div>
+      <h3>Workouts</h3>
+      {items.length === 0 && !loading && <p>No workouts found.</p>}
+      <ul className="list-group mb-3">
+        {items.map((it, i) => (
+          <li className="list-group-item" key={it.id ?? i}>
+            <strong>{it.name ?? it.title ?? `Workout ${i+1}`}</strong>
+            <div className="small text-muted">{it.notes ?? ''}</div>
+            <pre className="mb-0">{JSON.stringify(it, null, 2)}</pre>
+          </li>
+        ))}
+      </ul>
+      {next && (
+        <button className="btn btn-secondary" onClick={() => fetchData(next)} disabled={loading}>
+          {loading ? 'Loading…' : 'Load more'}
+        </button>
+      )}
+    </div>
+  )
+}
