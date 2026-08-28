@@ -15,7 +15,9 @@ export default function Teams() {
   const [next, setNext] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const initialUrl = `${API_BASE}/teams/`
+  const initialUrl = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+    : `http://localhost:8000/api/teams/`
 
   async function fetchData(url = initialUrl) {
     setLoading(true)

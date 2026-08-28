@@ -15,7 +15,9 @@ export default function Activities() {
   const [next, setNext] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const initialUrl = `${API_BASE}/activities/`
+  const initialUrl = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+    : `http://localhost:8000/api/activities/`
 
   async function fetchData(url = initialUrl) {
     setLoading(true)

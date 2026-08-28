@@ -15,7 +15,9 @@ export default function Users() {
   const [next, setNext] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const initialUrl = `${API_BASE}/users/`
+  const initialUrl = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`
+    : `http://localhost:8000/api/users/`
 
   async function fetchData(url = initialUrl) {
     setLoading(true)

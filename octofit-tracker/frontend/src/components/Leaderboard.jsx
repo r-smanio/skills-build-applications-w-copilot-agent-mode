@@ -15,7 +15,9 @@ export default function Leaderboard() {
   const [next, setNext] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const initialUrl = `${API_BASE}/leaderboard/`
+  const initialUrl = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+    : `http://localhost:8000/api/leaderboard/`
 
   async function fetchData(url = initialUrl) {
     setLoading(true)

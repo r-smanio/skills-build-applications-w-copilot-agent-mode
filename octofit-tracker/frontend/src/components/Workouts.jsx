@@ -15,7 +15,9 @@ export default function Workouts() {
   const [next, setNext] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const initialUrl = `${API_BASE}/workouts/`
+  const initialUrl = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`
+    : `http://localhost:8000/api/workouts/`
 
   async function fetchData(url = initialUrl) {
     setLoading(true)
