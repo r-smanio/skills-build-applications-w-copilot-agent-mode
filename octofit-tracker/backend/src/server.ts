@@ -29,7 +29,7 @@ app.get('/api/health', (_request, response) => {
 app.get('/api/config', (_req, res) => {
   const codespace = process.env.CODESPACE_NAME;
   const apiUrl = codespace
-    ? `https://${codespace}-${port}.githubpreview.dev`
+    ? `https://${codespace}-${port}.app.github.dev`
     : `http://localhost:${port}`;
   res.json({ apiUrl });
 });
@@ -45,5 +45,7 @@ app.use('/api/workouts', workoutsRouter);
 connectDb();
 
 app.listen(port, '0.0.0.0', () => {
-  console.log(`OctoFit API listening on port ${port}`);
+  const codespace = process.env.CODESPACE_NAME;
+  const preview = codespace ? `https://${codespace}-${port}.app.github.dev` : `http://localhost:${port}`;
+  console.log(`OctoFit API listening on port ${port} — ${preview}`);
 });
