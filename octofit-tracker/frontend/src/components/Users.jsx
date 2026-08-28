@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 
-const CODESPACE = import.meta.env.VITE_CODESPACE_NAME
-const API_BASE = CODESPACE ? `https://${CODESPACE}-8000.app.github.dev/api` : `http://localhost:8000/api`
-if (!CODESPACE && typeof window !== 'undefined') console.warn('VITE_CODESPACE_NAME not set; falling back to http://localhost:8000 (set VITE_CODESPACE_NAME in .env.local for Codespaces)')
+const API_BASE = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api`
+  : `http://localhost:8000/api`
+if (!import.meta.env.VITE_CODESPACE_NAME && typeof window !== 'undefined') console.warn('VITE_CODESPACE_NAME not set; falling back to http://localhost:8000 (set VITE_CODESPACE_NAME in .env.local for Codespaces)')
 
 function parseList(json) {
   if (Array.isArray(json)) return json
